@@ -1,10 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-    <title></title>
-</head>
-<body>
-    <script src="/js/vue.js"></script>
-    <script src="/js/axios.min.js"></script>
-</body>
+    <head>
+        <title>Meme Board</title>
+        <link rel="stylesheet" href="/styles.css" />
+    </head>
+    <body>
+        <h1>Rank my Meme</h1>
+        <div id="main">
+            <ul>
+                <li v-for="image in images">
+                    <div class="img-container">
+                        <img :src="image.url" :alt="image.title" />
+                    </div>
+                    <h4 class="title">{{image.title}}</h4>
+                    <p class="descr">{{image.description}}</p>
+                    <p class="username">by {{image.username}}</p>
+                </li>
+            </ul>
+        </div>
+        <script src="/js/vue.js"></script>
+        <script src="/js/axios.min.js"></script>
+        <script src="/script.js"></script>
+    </body>
 </html>

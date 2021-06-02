@@ -1,0 +1,49 @@
+body {
+    background-color: purple;
+}
+
+h1 {
+    text-align: center;
+    margin: 50px;
+}
+
+ul {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+}
+
+ul > li {
+    margin: 0;
+}
+
+li > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.img-container {
+    width: 300px;
+    height: 200px;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.title {
+    text-align: center;
+}
+
+.descr {
+    text-align: center;
+}
+
+.username {
+    text-align: right;
+    margin-top: 0;
+}
