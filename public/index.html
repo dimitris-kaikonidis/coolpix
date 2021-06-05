@@ -7,16 +7,42 @@
     <body>
         <h1>Rank my Meme</h1>
         <div id="main">
-            <ul>
-                <li v-for="image in images">
+            <div>
+                <input
+                    v-model="title"
+                    type="text"
+                    name="title"
+                    placeholder="title"
+                />
+                <input
+                    v-model="description"
+                    type="text"
+                    name="description"
+                    placeholder="description"
+                />
+                <input
+                    v-model="username"
+                    type="text"
+                    name="username"
+                    placeholder="username"
+                />
+                <input
+                    @change="selectImg"
+                    type="file"
+                    name="file"
+                    accept="image/*"
+                />
+                <button v-if="file" @click="uploadImg">Upload Image</button>
+            </div>
+            <h3 v-if="error">{{error}}</h3>
+            <div id="imgs">
+                <figure v-for="image in images">
                     <div class="img-container">
                         <img :src="image.url" :alt="image.title" />
                     </div>
-                    <h4 class="title">{{image.title}}</h4>
-                    <p class="descr">{{image.description}}</p>
-                    <p class="username">by {{image.username}}</p>
-                </li>
-            </ul>
+                    <figcaption class="descr">{{image.description}}</figcaption>
+                </figure>
+            </div>
         </div>
         <script src="/js/vue.js"></script>
         <script src="/js/axios.min.js"></script>

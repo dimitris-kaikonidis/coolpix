@@ -1,13 +1,15 @@
 const chalk = require("chalk");
-
-const { getImages } = require("./utilities/db");
-const cookieSession = require("cookie-session");
+const fs = require("fs/promises");
+const { getImages, storeImage } = require("./utilities/db");
+const { uploader } = require("./utilities/upload");
+const { uploadFile, getS3URL } = require("./utilities/S3");
+//const cookieSession = require("cookie-session");
 const express = require("express");
-
 
 const app = express();
 
 app.use(express.static("public"));
+app.use("/uploads", express.static("uploads"));
 
 // app.use(cookieSession({
 //     secret: sessionSecret,
@@ -25,6 +27,25 @@ app.get("/images", (req, res) =>
         .then(result => res.json(result.rows))
         .catch(error => console.log(error))
 );
+
+app.post("/api/upload", uploader.single("file"), (req, res) => {
+    if (!req.file) res.redirect("/");
+    else
+        uploadFile(req.file)
+            .then(result => {
+                fs.rm("./uploads/" + req.file.filename);
+                const url = getS3URL(req.file.filename);
+                const { title, description, username } = req.body;
+                storeImage(url, title, description, username)
+                    .then(result => res.json({ success: true, images: result.rows }))
+                    .catch(error => {
+                        res.json({ success: false });
+                        console.log(error);
+                    });
+            })
+            .catch(error => console.log(error));
+
+});
 
 if (require.main === module) {
     const PORT = process.env.PORT || 8080;

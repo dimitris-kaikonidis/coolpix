@@ -7,7 +7,7 @@ h1 {
     margin: 50px;
 }
 
-ul {
+#imgs {
     display: grid;
     grid-template-columns: auto auto auto;
     justify-content: space-around;
@@ -15,16 +15,13 @@ ul {
     padding: 0;
 }
 
-ul > li {
+figure {
     margin: 0;
 }
 
-li > div {
+.img-container {
     display: flex;
     flex-direction: column;
-}
-
-.img-container {
     width: 300px;
     height: 200px;
 }
