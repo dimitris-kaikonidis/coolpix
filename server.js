@@ -3,6 +3,7 @@ const fs = require("fs/promises");
 const { getImages, storeImage } = require("./utilities/db");
 const { uploader } = require("./utilities/upload");
 const { uploadFile, getS3URL } = require("./utilities/S3");
+const { analyzeImg } = require("./utilities/rekognition");
 //const cookieSession = require("cookie-session");
 const express = require("express");
 
@@ -36,6 +37,11 @@ app.post("/api/upload", uploader.single("file"), (req, res) => {
                 fs.rm("./uploads/" + req.file.filename);
                 const url = getS3URL(req.file.filename);
                 const { title, description, username } = req.body;
+                analyzeImg(url).then(result => {
+                    const tags = [];
+                    result.Labels.forEach(Label => tags.push(Label.Name));
+                    console.log(tags);
+                });
                 storeImage(url, title, description, username)
                     .then(result => res.json({ success: true, images: result.rows }))
                     .catch(error => {
@@ -44,7 +50,6 @@ app.post("/api/upload", uploader.single("file"), (req, res) => {
                     });
             })
             .catch(error => console.log(error));
-
 });
 
 if (require.main === module) {

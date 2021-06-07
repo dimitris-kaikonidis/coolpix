@@ -1,7 +1,7 @@
 const fs = require("fs");
 const aws = require("aws-sdk");
 
-let secrets = process.env.NODE_ENV === "production" ? process.env : require("../secrets.json");
+const secrets = process.env.NODE_ENV === "production" ? process.env : require("../secrets.json");
 
 const s3 = new aws.S3({
     accessKeyId: secrets.AWS_KEY,

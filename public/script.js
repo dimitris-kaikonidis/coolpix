@@ -28,7 +28,9 @@ new Vue({
                 formData.append("file", this.file);
                 axios.post("/api/upload", formData)
                     .then(res => {
-                        if (res.data.success) this.images.unshift(res.data.images);
+                        if (res.data.success) {
+                            this.images.unshift(res.data.images);
+                        }
                         else this.error = "Upload was unsuccessful. Please Try again";
                     });
             } catch (error) {
