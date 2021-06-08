@@ -1,22 +1,27 @@
-body {
-    background-color: purple;
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: "Odibee Sans", sans-serif;
+    font-size: 20px;
 }
 
 h1 {
-    text-align: center;
-    margin: 50px;
+    margin: 30px 0;
+    font-size: 50px;
+}
+
+h3 {
+    font-size: 30px;
 }
 
 #imgs {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
     justify-content: space-around;
     list-style: none;
-    padding: 0;
-}
-
-figure {
-    margin: 0;
 }
 
 .img-container {
@@ -24,23 +29,206 @@ figure {
     flex-direction: column;
     width: 300px;
     height: 200px;
+    margin-bottom: 30px;
 }
 
-img {
+.img-container > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.title {
-    text-align: center;
+.modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
 }
 
-.descr {
-    text-align: center;
+.modal::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #5e44eebd;
 }
 
-.username {
-    text-align: right;
+.close {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    z-index: 2;
+    cursor: pointer;
+    background-color: inherit;
+}
+
+.delete {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 20px;
+    z-index: 2;
+    cursor: pointer;
+    background-color: red;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+/* upload-image-modal-component */
+
+#upload-image-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgb(54, 54, 202);
+    color: white;
+    font-size: large;
+    padding: 10px;
+    cursor: pointer;
+    height: 50px;
+}
+
+#upload-image-inputs {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: 400px;
+    background-color: rgba(49, 46, 46, 0.5);
+    border-radius: 10px;
+}
+
+#upload-image-inputs > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    width: 80%;
+}
+
+#upload-image-inputs > div > * {
+    min-height: 20px;
+    margin-bottom: 10px;
+    width: 70%;
+}
+
+#upload-image-inputs > div > .title {
+    text-align: start;
+}
+
+#upload-image-inputs > div > .descr {
+    text-align: start;
+    resize: none;
+    height: 100px;
+}
+
+h3#error-message {
+    position: fixed;
+    text-align: center;
+    bottom: 0px;
+}
+
+/* image-modal-component */
+
+.modal > figure {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 7px solid #4d375d;
+    border-radius: 10px;
+}
+
+.modal > figure > div > figcaption {
     margin-top: 0;
+    background-color: black;
+    color: white;
+    margin-top: -5px;
+}
+
+.modal > figure > aside {
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: white;
+    border-left: 5px solid #4d375d;
+}
+
+.modal > figure > aside > h3 {
+    border-bottom: 5px solid #4d375d;
+}
+
+.modal > figure > div > img {
+    max-width: 800px;
+    max-height: 500px;
+    background-color: white;
+}
+
+/* comments-component */
+
+#comment-section {
+    margin: 10px 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#comment-section > .comments {
+    margin: 4px, 4px;
+    padding: 4px;
+    width: 400px;
+    height: 330px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-align: justify;
+}
+
+#comment-section > .comments > div {
+    display: flex;
+    gap: 5px;
+    text-align: left;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: lightblue;
+    border-radius: 5px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+#comment-submit {
+    display: flex;
+    justify-content: space-between;
+}
+
+#comment-submit > textarea {
+    text-align: left;
+    resize: none;
+    height: 50px;
+    width: 100%;
+}
+
+#comment-submit > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30%;
+}
+
+#comment-submit > div > button:hover {
+    background-color: darkgrey;
 }

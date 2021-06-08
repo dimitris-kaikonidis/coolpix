@@ -1,50 +1,136 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Meme Board</title>
+        <title>CoolPix</title>
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Odibee+Sans"
+        />
         <link rel="stylesheet" href="/styles.css" />
     </head>
     <body>
-        <h1>Rank my Meme</h1>
-        <div id="main" :key="images">
-            <div>
-                <input
-                    v-model="title"
-                    type="text"
-                    name="title"
-                    placeholder="title"
-                />
-                <input
-                    v-model="description"
-                    type="text"
-                    name="description"
-                    placeholder="description"
-                />
-                <input
-                    v-model="username"
-                    type="text"
-                    name="username"
-                    placeholder="username"
-                />
-                <input
-                    @change="selectImg"
-                    type="file"
-                    name="file"
-                    accept="image/*"
-                />
-                <button v-if="file" @click="uploadImg">Upload Image</button>
-            </div>
-            <h3 v-if="error">{{error}}</h3>
-            <div id="imgs">
-                <figure v-for="image in images">
+        <div id="main">
+            <h1>CoolPix</h1>
+            <upload-image-modal-component
+                @uploaded="renderNewImages"
+            ></upload-image-modal-component>
+
+            <div
+                id="imgs"
+                v-infinite-scroll="loadMoreImages"
+                infinite-scroll-disabled="scrollable"
+                infinite-scroll-throttle-delay="1000"
+                infinite-scroll-distance="10"
+            >
+                <figure
+                    v-for="(image, index) in images"
+                    @click="imageSelected=image.id"
+                    :key="index"
+                >
                     <div class="img-container">
                         <img :src="image.url" :alt="image.title" />
                     </div>
-                    <figcaption class="descr">{{image.description}}</figcaption>
                 </figure>
             </div>
+
+            <image-modal-component
+                v-if="imageSelected !== null"
+                :image-id="imageSelected"
+                @close="closeModal"
+                @delete="filterImages"
+            ></image-modal-component>
         </div>
+
+        <script id="comment-component" type="text/x-template">
+            <div id="comment-section">
+                <div class="comments">
+                    <div v-for="comment in comments">
+                        <p>{{comment.username}}: </p>
+                        <p>{{comment.comment}}</p>
+                    </div>
+                </div>
+                <div id="comment-submit">
+                    <textarea
+                        v-model="comment"
+                        type="text"
+                        name="comment"
+                        placeholder="Comment..."
+                        maxlength="100"
+                    ></textarea>
+                    <div>
+                        <input
+                            v-model="username"
+                            type="text"
+                            name="username"
+                            placeholder="Username"
+                        />
+                        <button @click="[makeComment(), reset()]">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </script>
+
+        <script id="image-modal-component" type="text/x-template">
+            <div class="modal">
+                <button class="close" @click="closeMethod">❌</button>
+                <figure v-if="image">
+                    <div>
+                        <img :src="image.url" :alt="image.title" />
+                        <figcaption>{{image.description}}</figcaption>
+                    </div>
+                    <aside>
+                        <h3>{{image.title}}</h3>
+                        <comment-component :image-id="image.id"></comment-component>
+                        <h6>Uploaded by {{image.username}} {{date}}</h6>
+                    </aside>
+                </figure>
+                <button class="delete" @click="deleteImage">Delete</button>
+            </div>
+        </script>
+
+        <script id="upload-image-modal-component" type="text/x-template">
+            <button id="upload-image-button" v-if="!visible" @click="toggle">Upload Image</button>
+            <div id="upload-image" class="modal" v-else>
+                <button class="close" @click="[toggle(), cancel()]">❌</button>
+                <div id="upload-image-inputs">
+                    <div id="select-pic" v-if="file === null">
+                        <h3>Select a Pic!</h3>
+                        <p>Max Filesize: 10MB</p>
+                        <input
+                            @change="selectImg"
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                        />
+                    </div>
+                    <div v-else id="enter-details">
+                        <h3>Enter Picture Details</h3>
+                        <p>{{size}}MB</p>
+                        <input
+                            class="title"
+                            v-model="title"
+                            type="text"
+                            name="title"
+                            placeholder="title..."
+                        />
+                        <textarea
+                            class="descr"
+                            v-model="description"
+                            type="text"
+                            name="description"
+                            placeholder="description..."
+                            maxlength="180"
+                        ></textarea>
+                        <button @click="[uploadImg(), reset()]">Upload Image</button>
+                        <button @click="reset" >Cancel</button>
+                        <h3 id="error-message" v-if="error">{{error}}</h3>
+                    </div>
+                </div>
+            </div>
+        </script>
+
         <script src="/js/vue.js"></script>
+        <script src="https://unpkg.com/vue-infinite-scroll@2.0.2/vue-infinite-scroll.js"></script>
         <script src="/js/axios.min.js"></script>
         <script src="/script.js"></script>
     </body>
