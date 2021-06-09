@@ -18,6 +18,8 @@ module.exports.getImage = (id) => db.query(
     `, [id]
 );
 
+module.exports.deleteImage = (id) => db.query(`DELETE FROM images WHERE id = $1 RETURNING url`, [id]);
+
 module.exports.storeImage = (url, username, title, description, tags) => db.query(
     `INSERT INTO images (url, username, title, description, tags) VALUES ($1, $2, $3, $4, $5) RETURNING *;`, [url, username, title, description, tags]
 );

@@ -101,7 +101,9 @@ Vue.component("image-modal-component", {
             this.$emit("close");
         },
         deleteImage() {
-            this.$emit("delete", this.imageId);
+            this.$emit("delete", this.image.id);
+            axios.delete(`/api/delete/${this.imageId}`);
+            this.closeMethod();
         },
         next() {
             this.$emit("next", this.image.next_id);

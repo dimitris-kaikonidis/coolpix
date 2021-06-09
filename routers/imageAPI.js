@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
-const { getFirstImages, getNextImages, getImage, storeImage, setTags } = require("../utilities/db");
+const { getFirstImages, getNextImages, getImage, deleteImage, storeImage, setTags } = require("../utilities/db");
 const { uploader } = require("../utilities/upload");
-const { uploadFile, getS3URL } = require("../utilities/S3");
+const { uploadFile, deleteFile, getS3URL } = require("../utilities/S3");
 const { analyzeImg } = require("../utilities/rekognition");
 const express = require("express");
 const router = express.Router();
@@ -60,6 +60,11 @@ router.post("/api/tags", (req, res) => {
     setTags(tags.split(","), id)
         .then(result => res.json(result.rows[0]))
         .catch(error => console.log(error));
+});
+
+router.delete("/api/delete/:id", (req, res) => {
+    const { id } = req.params;
+    deleteImage(id).then(result => deleteFile(result.rows[0].url));
 });
 
 module.exports = router;

@@ -22,4 +22,13 @@ module.exports.uploadFile = fileToUpload => {
         .promise();
 };
 
+module.exports.deleteFile = fileUrl => {
+    return s3
+        .deleteObject({
+            Bucket: "imageboard-dim",
+            Key: fileUrl
+        })
+        .promise();
+}
+
 module.exports.getS3URL = filename => "https://imageboard-dim.s3.us-east-1.amazonaws.com/" + filename;
