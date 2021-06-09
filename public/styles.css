@@ -183,6 +183,15 @@ h3#error-message {
     color: white;
 }
 
+.modal > figure > div > #tags {
+    display: flex;
+    color: white;
+}
+
+.modal > figure > div > #tags > p {
+    margin-right: 20px;
+}
+
 .modal > figure > aside {
     min-width: 300px;
     display: flex;

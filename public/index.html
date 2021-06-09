@@ -78,9 +78,11 @@
                 <button class="close" @click="closeMethod">❌</button>
                 <figure v-if="image">
                     <div>
+                        <div id="tags">
+                            <p v-for="(tag, index) in tags" :key="index">{{tag}}</p>
+                        </div>
                         <img :src="image.url" :alt="image.title" />
                         <figcaption>{{image.description}}</figcaption>
-                        <figcaption>{{image.tags}}</figcaption>
                     </div>
                     <aside>
                         <h3>{{image.title}}</h3>

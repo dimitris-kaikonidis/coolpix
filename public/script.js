@@ -3,6 +3,7 @@ Vue.component("upload-image-modal-component", {
     data() {
         return {
             visible: false,
+            id: "",
             title: "",
             description: "",
             username: "",
@@ -18,6 +19,7 @@ Vue.component("upload-image-modal-component", {
             this.visible = !this.visible;
         },
         reset() {
+            this.id = "";
             this.title = "";
             this.description = "";
             this.tags = [];
@@ -45,6 +47,7 @@ Vue.component("upload-image-modal-component", {
                         if (res.data.success) {
                             this.$emit("uploaded", ...res.data.images);
                             this.tags = res.data.images[0].tags;
+                            this.id = res.data.images[0].id;
                             this.step = 3;
                         }
                         else this.error = "Upload was unsuccessful. Please Try again";
@@ -70,7 +73,8 @@ Vue.component("image-modal-component", {
     data() {
         return {
             image: null,
-            date: ""
+            date: "",
+            tags: ""
         };
     },
     mounted() {
@@ -88,6 +92,7 @@ Vue.component("image-modal-component", {
                     if (res.data.success) {
                         this.image = res.data.image;
                         this.date = `${(new Date(this.image.created_at)).getMonth()}/${(new Date(this.image.created_at)).getFullYear()}`;
+                        this.tags = this.image.tags ? this.image.tags.map(tag => "#" + tag) : "";
                     }
                 })
                 .catch(error => console.log(error));
