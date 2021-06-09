@@ -75,6 +75,12 @@ Vue.component("image-modal-component", {
         deleteImage() {
             this.$emit("delete", this.imageId);
         },
+        next() {
+            this.$emit("next", this.image.next_id);
+        },
+        prev() {
+            this.$emit("prev", this.image.prev_id);
+        }
     },
 });
 
@@ -161,6 +167,12 @@ new Vue({
                 return;
             }
 
+        },
+        next(id) {
+            this.imageSelected = id;
+        },
+        prev(id) {
+            this.imageSelected = id;
         }
     }
 });

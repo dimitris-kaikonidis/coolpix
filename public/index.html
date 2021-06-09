@@ -38,6 +38,8 @@
                 :image-id="imageSelected"
                 @close="closeModal"
                 @delete="filterImages"
+                @prev="prev"
+                @next="next"
             ></image-modal-component>
         </div>
 
@@ -45,8 +47,7 @@
             <div id="comment-section">
                 <div class="comments">
                     <div v-for="comment in comments">
-                        <p>{{comment.username}}: </p>
-                        <p>{{comment.comment}}</p>
+                        <p>{{comment.username}}: {{comment.comment}} </p>
                     </div>
                 </div>
                 <div id="comment-submit">
@@ -84,6 +85,8 @@
                         <h6>Uploaded by {{image.username}} {{date}}</h6>
                     </aside>
                 </figure>
+                <button id="prev-img" class="nav-buttons" @click="next"><</button>
+                <button id="next-img" class="nav-buttons" @click="prev">></button>
                 <button class="delete" @click="deleteImage">Delete</button>
             </div>
         </script>

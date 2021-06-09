@@ -150,6 +150,22 @@ h3#error-message {
     border-radius: 10px;
 }
 
+.modal > .nav-buttons {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    font-size: 100px;
+}
+
+.modal > #prev-img {
+    left: 5%;
+}
+
+.modal > #next-img {
+    right: 5%;
+}
+
 .modal > figure > div > figcaption {
     margin-top: 0;
     background-color: black;
@@ -171,8 +187,15 @@ h3#error-message {
     border-bottom: 5px solid #4d375d;
 }
 
+.modal > figure > div {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .modal > figure > div > img {
-    max-width: 800px;
+    max-width: 600px;
     max-height: 500px;
     background-color: white;
 }
@@ -198,7 +221,6 @@ h3#error-message {
 }
 
 #comment-section > .comments > div {
-    display: flex;
     gap: 5px;
     text-align: left;
     margin-bottom: 15px;
@@ -208,6 +230,10 @@ h3#error-message {
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
+}
+
+#comment-section > .comments > div > p {
+    text-align: left;
 }
 
 #comment-submit {
