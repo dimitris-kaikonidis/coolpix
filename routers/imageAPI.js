@@ -1,5 +1,5 @@
 const fs = require("fs/promises");
-const { getFirstImages, getNextImages, getImage, storeImage } = require("../utilities/db");
+const { getFirstImages, getNextImages, getImage, storeImage, setTags } = require("../utilities/db");
 const { uploader } = require("../utilities/upload");
 const { uploadFile, getS3URL } = require("../utilities/S3");
 const { analyzeImg } = require("../utilities/rekognition");
@@ -41,19 +41,25 @@ router.post("/api/upload", uploader.single("file"), (req, res) => {
                 fs.rm("./uploads/" + req.file.filename);
                 const url = getS3URL(req.file.filename);
                 const { title, description, username } = req.body;
-                // analyzeImg(url).then(result => {
-                //     const tags = [];
-                //     result.Labels.forEach(Label => tags.push(Label.Name));
-                //     console.log(tags);
-                // });
-                storeImage(url, username, title, description)
-                    .then(result => res.json({ success: true, images: result.rows }))
-                    .catch(error => {
-                        res.json({ success: false });
-                        console.log(error);
-                    });
+                const tags = [];
+                analyzeImg(url).then(result => {
+                    result.Labels.forEach(Label => tags.push(Label.Name));
+                    storeImage(url, username, title, description, tags)
+                        .then(result => res.json({ success: true, images: result.rows }))
+                        .catch(error => {
+                            res.json({ success: false });
+                            console.log(error);
+                        });
+                });
             })
             .catch(error => console.log(error));
+});
+
+router.post("/api/tags", (req, res) => {
+    const { id, tags } = req.body;
+    setTags(tags, id)
+        .then(result => res.json(result.rows[0]))
+        .catch(error => console.log(error));
 });
 
 module.exports = router;

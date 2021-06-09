@@ -106,6 +106,7 @@ h3 {
     height: 400px;
     background-color: rgba(49, 46, 46, 0.5);
     border-radius: 10px;
+    color: white;
 }
 
 #upload-image-inputs > div {
@@ -126,10 +127,18 @@ h3 {
     text-align: start;
 }
 
+#upload-image-inputs > div > .username {
+    text-align: start;
+}
+
 #upload-image-inputs > div > .descr {
     text-align: start;
     resize: none;
     height: 100px;
+}
+
+#upload-image-inputs > div > .tags {
+    text-align: start;
 }
 
 h3#error-message {
@@ -151,6 +160,8 @@ h3#error-message {
 }
 
 .modal > .nav-buttons {
+    text-decoration: none;
+    color: black;
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
@@ -167,10 +178,9 @@ h3#error-message {
 }
 
 .modal > figure > div > figcaption {
-    margin-top: 0;
+    margin-top: 10px;
     background-color: black;
     color: white;
-    margin-top: -5px;
 }
 
 .modal > figure > aside {

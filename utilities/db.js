@@ -18,8 +18,8 @@ module.exports.getImage = (id) => db.query(
     `, [id]
 );
 
-module.exports.storeImage = (url, username, title, description) => db.query(
-    `INSERT INTO images (url, username, title, description) VALUES ($1, $2, $3, $4) RETURNING *;`, [url, username, title, description]
+module.exports.storeImage = (url, username, title, description, tags) => db.query(
+    `INSERT INTO images (url, username, title, description, tags) VALUES ($1, $2, $3, $4, $5) RETURNING *;`, [url, username, title, description, tags]
 );
 
 module.exports.getImageComments = (imageId) => db.query(`SELECT * FROM comments WHERE imageId = $1 ORDER BY created_at DESC;`, [imageId]);
@@ -27,3 +27,5 @@ module.exports.getImageComments = (imageId) => db.query(`SELECT * FROM comments 
 module.exports.addComment = (comment, username, imageId) => db.query(
     `INSERT INTO comments (comment, username, imageId) VALUES ($1, $2, $3) RETURNING *;`, [comment, username, imageId]
 );
+
+module.exports.setTags = (tags, imageId) => db.query(`UPDATE images SET tags = $1 WHERE id = $2 RETURNING tags;`, [tags, imageId]);

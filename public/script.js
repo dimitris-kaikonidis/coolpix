@@ -5,9 +5,11 @@ Vue.component("upload-image-modal-component", {
             visible: false,
             title: "",
             description: "",
-            username: "" || "anonymous",
+            username: "",
+            tags: [],
             file: null,
             size: 0,
+            step: 1,
             error: ""
         };
     },
@@ -18,13 +20,16 @@ Vue.component("upload-image-modal-component", {
         reset() {
             this.title = "";
             this.description = "";
+            this.tags = [];
             this.file = null;
             this.size = 0;
             this.error = "";
+            this.step = 1;
         },
         selectImg(event) {
             this.file = event.target.files[0];
             this.size = (this.file.size / 1024 / 1024).toFixed(2);
+            this.step = 2;
         },
         uploadImg() {
             try {
@@ -34,17 +39,27 @@ Vue.component("upload-image-modal-component", {
                 formData.append("description", this.description);
                 formData.append("username", this.username);
                 formData.append("file", this.file);
+                formData.append("tags", this.tags);
                 axios.post("/api/upload", formData)
                     .then(res => {
                         if (res.data.success) {
                             this.$emit("uploaded", ...res.data.images);
-                            this.visible = false;
+                            this.tags = res.data.images[0].tags;
+                            this.step = 3;
                         }
                         else this.error = "Upload was unsuccessful. Please Try again";
                     });
             } catch (error) {
                 this.error = error;
             }
+        },
+        setTags() {
+            axios.post("/api/tags", { id: this.id, tags: this.tags })
+                .then(res => {
+                    this.tags = res.data;
+                    this.visible = false;
+                })
+                .catch(error => console.log(error));
         }
     }
 });
@@ -59,16 +74,24 @@ Vue.component("image-modal-component", {
         };
     },
     mounted() {
-        axios.get(`/api/images/${this.imageId}`)
-            .then(res => {
-                if (res.data.success) {
-                    this.image = res.data.image;
-                    this.date = `${(new Date(this.image.created_at)).getMonth()}/${(new Date(this.image.created_at)).getFullYear()}`;
-                }
-            })
-            .catch(error => console.log(error));
+        this.getImages();
+    },
+    watch: {
+        imageId: function () {
+            this.getImages();
+        }
     },
     methods: {
+        getImages() {
+            axios.get(`/api/images/${this.imageId}`)
+                .then(res => {
+                    if (res.data.success) {
+                        this.image = res.data.image;
+                        this.date = `${(new Date(this.image.created_at)).getMonth()}/${(new Date(this.image.created_at)).getFullYear()}`;
+                    }
+                })
+                .catch(error => console.log(error));
+        },
         closeMethod() {
             this.$emit("close");
         },
@@ -96,15 +119,21 @@ Vue.component("comment-component", {
         };
     },
     mounted() {
-        axios.get(`/comments/${this.imageId}`)
-            .then(res => {
-                if (res.data.success) {
-                    this.comments = res.data.comments;
-                }
-            })
-            .catch(error => console.log(error));
+        this.getComments();
+    },
+    updated() {
+        this.getComments();
     },
     methods: {
+        getComments() {
+            axios.get(`/comments/${this.imageId}`)
+                .then(res => {
+                    if (res.data.success) {
+                        this.comments = res.data.comments;
+                    }
+                })
+                .catch(error => console.log(error));
+        },
         makeComment() {
             try {
                 if (!this.comment) throw "empty";
@@ -125,13 +154,12 @@ new Vue({
     el: "#main",
     data: {
         images: [],
-        imageSelected: null,
+        imageSelected: location.hash.slice(1),
         error: "",
         totalImageCount: 0,
         remainingImagesCount: 0,
         scrollable: this.remainingImagesCount ? true : false
     },
-
     mounted() {
         axios.get("/api/images/first")
             .then(result => {
@@ -140,8 +168,10 @@ new Vue({
                 this.remainingImagesCount = this.totalImageCount - 16 > 0 ? this.totalImageCount - 16 : 0;
             })
             .catch(error => console.log(error));
+        window.addEventListener("hashchange", () => {
+            this.imageSelected = location.hash.slice(1);
+        });
     },
-
     methods: {
         renderNewImages(newImg) {
             this.images.unshift(newImg);
@@ -149,6 +179,7 @@ new Vue({
         },
         closeModal() {
             this.imageSelected = null;
+            history.pushState(null, null, "/");
         },
         filterImages(id) {
             this.images = this.images.filter(image => image.id !== id);

@@ -27,9 +27,11 @@
                     @click="imageSelected=image.id"
                     :key="index"
                 >
-                    <div class="img-container">
-                        <img :src="image.url" :alt="image.title" />
-                    </div>
+                    <a :href="'#' + image.id"
+                        ><div class="img-container">
+                            <img :src="image.url" :alt="image.title" />
+                        </div>
+                    </a>
                 </figure>
             </div>
 
@@ -78,6 +80,7 @@
                     <div>
                         <img :src="image.url" :alt="image.title" />
                         <figcaption>{{image.description}}</figcaption>
+                        <figcaption>{{image.tags}}</figcaption>
                     </div>
                     <aside>
                         <h3>{{image.title}}</h3>
@@ -85,8 +88,8 @@
                         <h6>Uploaded by {{image.username}} {{date}}</h6>
                     </aside>
                 </figure>
-                <button id="prev-img" class="nav-buttons" @click="next"><</button>
-                <button id="next-img" class="nav-buttons" @click="prev">></button>
+                <a id="prev-img" class="nav-buttons" v-if="image.prev_id" @click="prev" :href="'#' + image.prev_id"><</a>
+                <a id="next-img" class="nav-buttons" v-if="image.next_id" @click="next" :href="'#' + image.next_id">></a>
                 <button class="delete" @click="deleteImage">Delete</button>
             </div>
         </script>
@@ -94,9 +97,9 @@
         <script id="upload-image-modal-component" type="text/x-template">
             <button id="upload-image-button" v-if="!visible" @click="toggle">Upload Image</button>
             <div id="upload-image" class="modal" v-else>
-                <button class="close" @click="[toggle(), cancel()]">❌</button>
+                <button class="close" @click="[toggle(), reset()]">❌</button>
                 <div id="upload-image-inputs">
-                    <div id="select-pic" v-if="file === null">
+                    <div id="select-pic" v-if="step == 1">
                         <h3>Select a Pic!</h3>
                         <p>Max Filesize: 10MB</p>
                         <input
@@ -106,7 +109,7 @@
                             accept="image/*"
                         />
                     </div>
-                    <div v-else id="enter-details">
+                    <div v-if="step == 2" id="enter-details">
                         <h3>Enter Picture Details</h3>
                         <p>{{size}}MB</p>
                         <input
@@ -114,7 +117,14 @@
                             v-model="title"
                             type="text"
                             name="title"
-                            placeholder="title..."
+                            placeholder="title"
+                        />
+                        <input
+                            class="username"
+                            v-model="username"
+                            type="text"
+                            name="username"
+                            placeholder="username"
                         />
                         <textarea
                             class="descr"
@@ -124,9 +134,20 @@
                             placeholder="description..."
                             maxlength="180"
                         ></textarea>
-                        <button @click="[uploadImg(), reset()]">Upload Image</button>
-                        <button @click="reset" >Cancel</button>
+                        <button @click="uploadImg">Upload Image</button>
+                        <button @click="reset">Cancel</button>
                         <h3 id="error-message" v-if="error">{{error}}</h3>
+                    </div>
+                    <div v-if="step == 3" id="enter-tags">
+                        <h3>Add some tags (optional)</h3>
+                        <input
+                            class="tags"
+                            v-model="tags"
+                            type="text"
+                            name="tags"
+                            placeholder="tags..."
+                        />
+                        <button @click="[setTags(), reset()]" >Submit</button>
                     </div>
                 </div>
             </div>
