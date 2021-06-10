@@ -132,12 +132,10 @@ Vue.component("comment-component", {
     mounted() {
         this.getComments();
     },
-    updated() {
-        this.getComments();
-    },
     watch: {
         imageId: function () {
             this.comments = [];
+            this.getComments();
         }
     },
     methods: {
