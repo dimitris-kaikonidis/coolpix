@@ -139,7 +139,7 @@ h3 {
 #loading > #loading-animation {
     background: url("./assets/Wedges-3s-200px.svg") no-repeat top left;
     background-size: contain;
-    cursor: pointer;
+    cursor: default;
     min-height: 22.5px;
     height: 100%;
     width: 25px;
