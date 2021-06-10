@@ -135,6 +135,11 @@ Vue.component("comment-component", {
     updated() {
         this.getComments();
     },
+    watch: {
+        imageId: function () {
+            this.comments = [];
+        }
+    },
     methods: {
         getComments() {
             axios.get(`/comments/${this.imageId}`)
@@ -148,7 +153,12 @@ Vue.component("comment-component", {
         makeComment() {
             try {
                 if (!this.comment) throw "empty";
-                axios.post("/comment", { comment: this.comment, username: this.username || "anonymous", imageId: this.imageId })
+                axios
+                    .post("/comment", {
+                        comment: this.comment,
+                        username: this.username || "anonymous",
+                        imageId: this.imageId
+                    })
                     .then(res => this.comments.unshift(res.data))
                     .catch(error => console.log(error));
             } catch (error) {
