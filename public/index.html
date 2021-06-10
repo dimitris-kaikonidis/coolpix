@@ -136,7 +136,8 @@
                             placeholder="description..."
                             maxlength="180"
                         ></textarea>
-                        <button @click="uploadImg">Upload Image</button>
+                        <button v-if="loading === false" @click="uploadImg">Upload Image</button>
+                        <button id="loading" v-if="loading"><span id="loading-animation"></span></button>
                         <button @click="reset">Cancel</button>
                         <h3 id="error-message" v-if="error">{{error}}</h3>
                     </div>

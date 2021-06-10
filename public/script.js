@@ -11,7 +11,8 @@ Vue.component("upload-image-modal-component", {
             file: null,
             size: 0,
             step: 1,
-            error: ""
+            error: "",
+            loading: false
         };
     },
     methods: {
@@ -27,6 +28,7 @@ Vue.component("upload-image-modal-component", {
             this.size = 0;
             this.error = "";
             this.step = 1;
+            this.loading = false;
         },
         selectImg(event) {
             this.file = event.target.files[0];
@@ -35,6 +37,7 @@ Vue.component("upload-image-modal-component", {
         },
         uploadImg() {
             try {
+                this.loading = true;
                 const formData = new FormData();
                 formData.append("title", this.title);
                 if (!this.title) throw "You must enter a title";
@@ -53,6 +56,7 @@ Vue.component("upload-image-modal-component", {
                         else this.error = "Upload was unsuccessful. Please Try again";
                     });
             } catch (error) {
+                this.loading = false;
                 this.error = error;
             }
         },

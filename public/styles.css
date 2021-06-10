@@ -131,6 +131,20 @@ h3 {
     text-align: start;
 }
 
+#loading {
+    display: flex;
+    justify-content: center;
+}
+
+#loading > #loading-animation {
+    background: url("./assets/Wedges-3s-200px.svg") no-repeat top left;
+    background-size: contain;
+    cursor: pointer;
+    min-height: 22.5px;
+    height: 100%;
+    width: 25px;
+}
+
 #upload-image-inputs > div > .descr {
     text-align: start;
     resize: none;
