@@ -56,8 +56,10 @@ router.post("/api/upload", uploader.single("file"), (req, res) => {
 });
 
 router.post("/api/tags", (req, res) => {
-    const { id, tags } = req.body;
-    setTags(tags.split(","), id)
+    const { id } = req.body;
+    let { tags } = req.body;
+    tags = Array.isArray(tags) ? tags : tags.split(",");
+    setTags(tags, id)
         .then(result => res.json(result.rows[0]))
         .catch(error => console.log(error));
 });
